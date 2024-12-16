@@ -1,0 +1,189 @@
+﻿@model QuanLyNhaHang.Models.ViewModel.OrderDishes
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Clients/Views/Shared/_LayoutClient.cshtml";
+}
+@if (TempData["LoginMessage"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["LoginMessage"]
+    </div>
+}
+<style>
+    .fh5co-text button {
+        background-color: #ff6f61; /* Màu nền cam/đỏ cho nổi bật */
+        color: #fff; /* Màu chữ trắng */
+        border: none; /* Xóa viền nút */
+        padding: 10px 20px; /* Khoảng cách trong nút */
+        border-radius: 5px; /* Góc bo tròn */
+        font-size: 16px; /* Kích thước chữ */
+        font-weight: bold; /* Chữ đậm */
+        cursor: pointer; /* Hiệu ứng con trỏ */
+        transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng chuyển đổi */
+    }
+
+        /* Hiệu ứng khi hover vào nút */
+        .fh5co-text button:hover {
+            background-color: #ff483d; /* Màu nền khi hover */
+            transform: scale(1.1); /* Phóng to nhẹ nút */
+        }
+
+        /* Hiệu ứng khi nút được nhấn */
+        .fh5co-text button:active {
+            transform: scale(0.95); /* Thu nhỏ nhẹ khi nhấn */
+            background-color: #e6392e; /* Màu nền đậm hơn khi nhấn */
+        }
+
+    /* Đảm bảo nút hiển thị đẹp trên các thiết bị */
+    .fh5co-text button {
+        display: inline-block;
+        text-align: center;
+        width: 100%; /* Đặt chiều rộng tùy ý nếu cần full-width */
+        margin-top: 10px; /* Khoảng cách phía trên nút */
+    }
+</style>
+<header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(/Assets2/images/Background2.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-0 text-left">
+
+
+                <div class="row row-mt-15em">
+                    <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+                        <span class="intro-text-small">Đặc sản miền quê Việt Nam</span>
+                        <h1 class="cursive-font">Euphoria Restaurant</h1>
+                        <span class="intro-text-small">Ra mắt từ năm 2005, nhà hàng Euphoria đã </span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="gtco-section">
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                <h2 class="cursive-font primary-color">Món ăn</h2>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var item in Model.mon_an)
+            {
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="fh5co-card-item">
+                        <a href="@item.picture" class="fh5co-card-item image-popup">
+                            <figure>
+                                <div class="overlay"><i class="ti-plus"></i></div>
+                                <img src="@item.picture" alt="Image" class="img-responsive">
+                            </figure>
+                        </a>
+                        <div class="fh5co-text">
+                            <h2>@item.name</h2>
+                            <p>@item.info</p>
+                            <p><span class="price cursive-font">@item.price đ</span></p>
+                            <button class="add-to-cart"
+                                    data-id="@item.Id"
+                                    data-name="@item.name"
+                                    data-info="@item.info"
+                                    data-price="@item.price">
+                                Đặt món
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+    </div>
+    <div class="gtco-section">
+        <div class="gtco-container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                    <h2 class="cursive-font primary-color">Nước uống</h2>
+                </div>
+            </div>
+            <div class="row">
+                @foreach (var item in Model.nuoc_uong)
+                {
+                    <div class="col-lg-4 col-md-4 col-sm-6">
+                        <a href="@item.picture" class="fh5co-card-item image-popup">
+                            <figure>
+                                <div class="overlay"><i class="ti-plus"></i></div>
+                                <img src="@item.picture" alt="Image" class="img-responsive">
+                            </figure>
+                        </a>
+                        <div class="fh5co-text">
+                            <h2>@item.name</h2>
+                            <p>@item.info</p>
+                            <p><span class="price cursive-font">@item.price đ</span></p>
+                            <button class="add-to-cart"
+                                    data-id="@item.Id"
+                                    data-name="@item.name"
+                                    data-info="@item.info"
+                                    data-price="@item.price">
+                                Đặt món
+                            </button>
+                        </div>
+
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function addToCart(item) {
+            // Lấy giỏ hàng hiện tại từ localStorage (nếu có)
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Kiểm tra xem món đã tồn tại trong giỏ chưa
+            const existingItemIndex = cart.findIndex(cartItem => cartItem.name === item.name);
+            if (existingItemIndex !== -1) {
+                // Nếu đã có, tăng số lượng
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                // Nếu chưa có, thêm món mới với số lượng 1
+                cart.push({ ...item, quantity: 1 });
+            }
+
+            // Cập nhật giỏ hàng trong localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tìm tất cả các nút "Đặt món"
+            const buttons = document.querySelectorAll('.add-to-cart');
+
+            // Lắng nghe sự kiện click trên từng nút
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Lấy thông tin từ các thuộc tính data-*
+                    const item = {
+                        id: parseInt(button.getAttribute('data-id'), 10),
+                        name: button.getAttribute('data-name'),
+                        info: button.getAttribute('data-info'),
+                        price: button.getAttribute('data-price'),
+                    };
+
+                    addToCart(item);
+
+                });
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+

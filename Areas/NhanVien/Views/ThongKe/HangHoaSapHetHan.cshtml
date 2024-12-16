@@ -1,0 +1,47 @@
+﻿@using QuanLyNhaHang.Models
+@model HangHoaSapHetHanViewModel
+@{
+    ViewBag.Title = "HangHoaSapHetHan";
+    Layout = "~/Areas/NhanVien/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+<h2 class="display-4 text-center">Hàng hóa sắp hết hạn</h2>
+
+<form asp-action="HangHoaSapHetHan" method="post" class="form-inline mb-3">
+    <div class="form-group mb-2">
+        <label for="currentDate" class="sr-only">Ngày hiện tại</label>
+        <input type="date" class="form-control" id="currentDate" name="currentDate" value="@Model.CurrentDate.ToString("yyyy-MM-dd")" required>
+    </div>
+    <div class="form-group mx-sm-3 mb-2">
+        <label for="endDate" class="sr-only">Đến ngày</label>
+        <input type="date" class="form-control" id="endDate" name="endDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" required>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Thống kê</button>
+</form>
+
+@if (Model != null && Model.HangHoaHetHanList.Any())
+{
+    <h3>Kết quả:</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Tên Nguyên Liệu</th>
+                    <th>Ngày Nhập</th>
+                    <th>Hạn Sử Dụng</th>
+                    <th>Số Ngày Còn Lại</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.HangHoaHetHanList)
+                {
+                    <tr class="@(item.SoNgayConLai <= 5 ? "table-danger" : "table-success")">
+                        <td>@item.TenNguyenLieu</td>
+                        <td>@item.NgayNhap.ToString("dd/MM/yyyy")</td>
+                        <td>@item.HanSuDung.ToString("dd/MM/yyyy")</td>
+                        <td>@item.SoNgayConLai</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

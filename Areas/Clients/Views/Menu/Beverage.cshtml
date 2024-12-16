@@ -1,0 +1,154 @@
+﻿@model IEnumerable<QuanLyNhaHang.Models.ViewModel.ItemViewModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Clients/Views/Shared/_LayoutClient.cshtml";
+}
+<style>
+    .rating {
+        font-size: 30px;
+        color: #ccc; /* Màu xám cho sao chưa được chọn */
+        cursor: pointer;
+    }
+
+        .rating .star {
+            transition: color 0.3s;
+        }
+
+            .rating .star.selected {
+                color: #ffcc00; /* Màu vàng cho sao đã chọn */
+            }
+
+    .average-rating {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #333;
+    }
+</style>
+<header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url(/Assets2/images/Background5.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-0 text-center">
+
+
+                <div class="row row-mt-15em">
+                    <div class="col-md-12 mt-text animate-box" data-animate-effect="fadeInUp">
+                        <span class="intro-text-small">Các món ăn quen thuộc của 3 miền Việt Nam</span>
+                        <h1 class="cursive-font">Cơm quán như cơm nhà</h1>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<div class="gtco-section">
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                <h2 class="cursive-font primary-color">Nước giải khát của nhà hàng Euphoria</h2>
+                <p>Với kinh nghiệm 30 năm của mình, Euphoria mang lại nhiều món ăn đa dạng các nền văn hóa khác nhau</p>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="fh5co-card-item">
+                        <a href="@item.picture" class="fh5co-card-item image-popup">
+                            <figure>
+                                <div class="overlay"><i class="ti-plus"></i></div>
+                                <img src="@item.picture" alt="Image" class="img-responsive">
+                            </figure>
+                        </a>
+                        <div class="fh5co-text">
+                            <h2>@item.name</h2>
+                            <p>@item.info</p>
+                            <p><span class="price cursive-font">@item.price đ</span></p>
+                            <div class="rating" data-item-id="@item.Id" data-initial-rating="@item.rating">
+                                <span class="star" data-rating="1">&#9733;</span>
+                                <span class="star" data-rating="2">&#9733;</span>
+                                <span class="star" data-rating="3">&#9733;</span>
+                                <span class="star" data-rating="4">&#9733;</span>
+                                <span class="star" data-rating="5">&#9733;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy tất cả các phần tử rating
+        const ratings = document.querySelectorAll('.rating');
+
+        ratings.forEach(function (ratingElement) {
+            // Lấy giá trị rating ban đầu từ data-initial-rating
+            const initialRating = parseInt(ratingElement.getAttribute('data-initial-rating'), 10);
+
+            // Lấy tất cả các sao con
+            const stars = ratingElement.querySelectorAll('.star');
+
+            // Cập nhật màu sắc sao dựa trên giá trị initialRating
+            stars.forEach(function (star, index) {
+                if (index < initialRating) {
+                    star.classList.add('selected');  // Thêm màu vàng cho sao đã chọn
+                } else {
+                    star.classList.remove('selected'); // Loại bỏ màu vàng cho sao chưa chọn
+                }
+            });
+
+            // Lặp qua tất cả các sao và thêm sự kiện click
+            stars.forEach(function (star, index) {
+                star.addEventListener('click', function () {
+                    // Lấy id của item từ data-item-id
+                    const itemId = parseInt(ratingElement.getAttribute('data-item-id'));
+
+                    // Lấy số sao đã chọn (index bắt đầu từ 0 nên cần +1)
+                    let rating = index + 1;
+
+                    // Cập nhật màu sao: thêm class 'selected' cho các sao từ 1 đến sao đã chọn
+                    stars.forEach(function (star, idx) {
+                        if (idx < rating) {
+                            star.classList.add('selected');  // Thêm màu vàng cho sao đã chọn
+                        } else {
+                            star.classList.remove('selected'); // Loại bỏ màu vàng cho sao chưa chọn
+                        }
+                    });
+
+                    // Gửi dữ liệu đánh giá tới controller, bao gồm rating và itemId
+                    submitRating(rating, itemId);
+                });
+            });
+        });
+
+        // Hàm gửi rating và itemId tới controller thông qua Fetch API
+        function submitRating(rating, itemId) {
+            fetch('/Menu/Rating', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ rating: rating, itemId: itemId })  // Gửi thêm itemId
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Xử lý kết quả trả về từ controller (nếu có)
+                    document.getElementById("ratingMessage").innerText = data.message;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById("ratingMessage").innerText = "Đã xảy ra lỗi. Vui lòng thử lại!";
+                });
+        }
+    });
+</script>

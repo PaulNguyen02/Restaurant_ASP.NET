@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Kết quả thanh toán";
+}
+
+<div class="container">
+    <h2>@ViewBag.Message</h2>
+    <div>
+        <p>
+            @if (ViewBag.Message.Contains("thành công"))
+            {
+                <strong>Chúc mừng, thanh toán của bạn đã thành công!</strong>
+            }
+            else
+            {
+                <strong>Xin lỗi, đã có lỗi xảy ra khi thanh toán!</strong>
+            }
+        </p>
+        <p>
+            <a href="@Url.Action("Index", "Home")">Trở về trang chủ</a>
+        </p>
+    </div>
+</div>

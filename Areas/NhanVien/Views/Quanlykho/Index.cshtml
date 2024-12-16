@@ -1,0 +1,225 @@
+﻿@model QuanLyNhaHang.Models.ViewModel.StorageStatisticViewModel
+@{
+    ViewBag.Title = "Trang Chủ Kho";
+    Layout = "~/Areas/NhanVien/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+<style>
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        background-color: white;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s, visibility 0.5s;
+    }
+
+        .popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+    .popup-content h3 {
+        margin-bottom: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+    }
+
+    .popup-content p {
+        font-size: 16px;
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+</style>
+<div class="popup" id="ratingPopup">
+    @if (@TempData["Rating"] == null)
+    {
+        <div class="popup-content">
+            <h3>Đánh giá của bạn:</h3>
+            <p>Bạn đã đánh giá: <strong>0</strong> sao</p>
+        </div>
+    }
+    else
+    {
+        <div class="popup-content">
+            <h3>Đánh giá của bạn:</h3>
+            <p>Bạn đã đánh giá: <strong>@TempData["Rating"]</strong> sao</p>
+        </div>
+    }
+</div>
+
+<div class="container">
+    <div class="page-title-container">
+        <div class="row">
+            <div class="col-12 col-md-7">
+                <h1 class="mb-0 pb-0 display-4" id="title">Thống kê hàng hóa của kho</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex">
+                <div class="dropdown-as-select me-3" data-setactive="false" data-childselector="span">
+                    <a class="pe-0 pt-0 align-top lh-1 dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+                        <span class="small-title">Thông Tin</span>
+                    </a>
+                </div>
+            </div>
+            <div class="mb-5">
+                <div class="row g-2">
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <a href="#">
+                            <div class="card h-100 hover-scale-up cursor-pointer">
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <div class="sw-6 sh-6 rounded-xl d-flex justify-content-center align-items-center border border-primary mb-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="cs-icon cs-icon-dollar text-primary"><circle cx="10" cy="10" r="8"></circle><path d="M8.2474 12.7882C9.21854 13.0238 10.3165 13.1347 11.255 12.7328C11.8747 12.4349 12.0341 11.9499 11.9943 11.3645C11.9508 10.4361 10.8492 10.0759 10.023 9.97886C9.37073 9.86455 8.53367 9.66016 8.15681 9.09552C7.83068 8.47891 8.00824 7.59903 8.73659 7.25954C9.4 6.95033 10.8166 6.87849 11.6536 7.25954"></path><path d="M10 5.5V7M10 13V14.5"></path></svg>
+                                    </div>
+                                    <div class="mb-1 d-flex align-items-center text-alternate text-small lh-1-25">Tổng số hàng đã trả</div>
+                                    <div class="text-primary cta-4">@Model.so_nguyen_lieu_tra</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <a href="~/NhanVien/HoaDon/DanhSachHoaDon">
+                            <div class="card h-100 hover-scale-up cursor-pointer">
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <div class="sw-6 sh-6 rounded-xl d-flex justify-content-center align-items-center border border-primary mb-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="cs-icon cs-icon-content text-primary"><path d="M3 5.5C3 4.09554 3 3.39331 3.33706 2.88886C3.48298 2.67048 3.67048 2.48298 3.88886 2.33706C4.39331 2 5.09554 2 6.5 2H13.5C14.9045 2 15.6067 2 16.1111 2.33706C16.3295 2.48298 16.517 2.67048 16.6629 2.88886C17 3.39331 17 4.09554 17 5.5V14.5C17 15.9045 17 16.6067 16.6629 17.1111C16.517 17.3295 16.3295 17.517 16.1111 17.6629C15.6067 18 14.9045 18 13.5 18H6.5C5.09554 18 4.39331 18 3.88886 17.6629C3.67048 17.517 3.48298 17.3295 3.33706 17.1111C3 16.6067 3 15.9045 3 14.5V5.5Z"></path><path d="M7 6.75C7 6.04777 7 5.69665 7.16853 5.44443C7.24149 5.33524 7.33524 5.24149 7.44443 5.16853C7.69665 5 8.04777 5 8.75 5H11.25C11.9522 5 12.3033 5 12.5556 5.16853C12.6648 5.24149 12.7585 5.33524 12.8315 5.44443C13 5.69665 13 6.04777 13 6.75V7.25C13 7.95223 13 8.30335 12.8315 8.55557C12.7585 8.66476 12.6648 8.75851 12.5556 8.83147C12.3033 9 11.9522 9 11.25 9H8.75C8.04777 9 7.69665 9 7.44443 8.83147C7.33524 8.75851 7.24149 8.66476 7.16853 8.55557C7 8.30335 7 7.95223 7 7.25V6.75Z"></path><path d="M7 12H13M7 15H13"></path></svg>
+                                    </div>
+                                    <div class="mb-1 d-flex align-items-center text-alternate text-small lh-1-25">Tổng số hàng đã xuất</div>
+                                    <div class="text-primary cta-4">@Model.so_nguyen_lieu_xuat</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <a href="/NhanVien/MonAn/DanhSachMonAn">
+                            <div class="card h-100 hover-scale-up cursor-pointer">
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <div class="sw-6 sh-6 rounded-xl d-flex justify-content-center align-items-center border border-primary mb-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="cs-icon cs-icon-server text-primary"><path d="M15 2H5C4.06812 2 3.60218 2 3.23463 2.15224 2.74458 2.35523 2.35523 2.74458 2.15224 3.23463 2 3.60218 2 4.06812 2 5 2 5.93188 2 6.39782 2.15224 6.76537 2.35523 7.25542 2.74458 7.64477 3.23463 7.84776 3.60218 8 4.06812 8 5 8H15C15.9319 8 16.3978 8 16.7654 7.84776 17.2554 7.64477 17.6448 7.25542 17.8478 6.76537 18 6.39782 18 5.93188 18 5 18 4.06812 18 3.60218 17.8478 3.23463 17.6448 2.74458 17.2554 2.35523 16.7654 2.15224 16.3978 2 15.9319 2 15 2zM15 12H5C4.06812 12 3.60218 12 3.23463 12.1522 2.74458 12.3552 2.35523 12.7446 2.15224 13.2346 2 13.6022 2 14.0681 2 15 2 15.9319 2 16.3978 2.15224 16.7654 2.35523 17.2554 2.74458 17.6448 3.23463 17.8478 3.60218 18 4.06812 18 5 18H15C15.9319 18 16.3978 18 16.7654 17.8478 17.2554 17.6448 17.6448 17.2554 17.8478 16.7654 18 16.3978 18 15.9319 18 15 18 14.0681 18 13.6022 17.8478 13.2346 17.6448 12.7446 17.2554 12.3552 16.7654 12.1522 16.3978 12 15.9319 12 15 12z"></path><path d="M13 5H15M13 15H15M7 8 7 12M13 8 13 12"></path></svg>
+                                    </div>
+                                    <div class="mb-1 d-flex align-items-center text-alternate text-small lh-1-25">Chi tiết nguyên liệu sản phẩm</div>
+                                    <div class="text-primary cta-4">@Model.so_chi_tiet_san_pham</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-6 mb-5">
+            <h2 class="small-title">Các nguyên liệu hoàn trả</h2>
+            <div class="mb-n2 scroll-out">
+                <div class="scroll-by-count os-host os-theme-dark os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition" data-count="6" style="height: 336px; margin-bottom: -8px;">
+                    <div class="os-resize-observer-host observed"><div class="os-resize-observer" style="left: 0px; right: auto;"></div></div><div class="os-size-auto-observer observed" style="height: calc(100% + 1px); float: left;"><div class="os-resize-observer"></div></div><div class="os-content-glue" style="margin: 0px -15px;"></div><div class="os-padding">
+                        <div class="os-viewport os-viewport-native-scrollbars-invisible" style="overflow-y: scroll;">
+                            <div class="os-content" style="padding: 0px 15px; height: 100%; width: 100%;">
+                                <!-- #region Hóa Đơn Gần Đây -->
+                                @if (Model.nguyen_lieu_tra != null)
+                                {
+                                    foreach (var item in Model.nguyen_lieu_tra)
+                                    {
+                                        <div class="card mb-2 sh-15 sh-md-6">
+                                            <div class="card-body pt-0 pb-0 h-100">
+                                                <div class="row g-0 h-100 align-content-center">
+                                                    <div class="col-12 col-md-3 d-flex align-items-center justify-content-md-end mb-1 mb-md-0 text-alternate">@item.name</div>
+                                                    <div class="col-12 col-md-3 d-flex align-items-center justify-content-md-end mb-1 mb-md-0 text-alternate">@item.quantity</div>
+                                                    <div class="col-12 col-md-3 d-flex align-items-center justify-content-md-end mb-1 mb-md-0 text-alternate">@item.price</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                <!-- #endregion -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable os-scrollbar-auto-hidden">
+                        <div class="os-scrollbar-track os-scrollbar-track-off"><div class="os-scrollbar-handle" style="width: 100%; transform: translate(0px, 0px);"></div></div>
+                    </div><div class="os-scrollbar os-scrollbar-vertical os-scrollbar-auto-hidden" style="height: calc(100% - 8px);"><div class="os-scrollbar-track os-scrollbar-track-off"><div class="os-scrollbar-handle" style="height: 67.7419%; transform: translate(0px, 0px);"></div></div></div><div class="os-scrollbar-corner"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 mb-5">
+            <h2 class="small-title">Các nguyên liệu xuất</h2>
+            <div class="scroll-out mb-n2">
+                <div class="scroll-by-count os-host os-theme-dark os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition" data-count="4" style="height: 352px; margin-bottom: -8px;">
+                    <div class="os-resize-observer-host observed"><div class="os-resize-observer" style="left: 0px; right: auto;"></div></div><div class="os-size-auto-observer observed" style="height: calc(100% + 1px); float: left;"><div class="os-resize-observer"></div></div><div class="os-content-glue" style="margin: 0px -15px;"></div><div class="os-padding">
+                        <div class="os-viewport os-viewport-native-scrollbars-invisible" style="overflow-y: scroll;">
+                            <div class="os-content" style="padding: 0px 15px; height: 100%; width: 100%;">
+                                @foreach (var item in Model.nguyen_lieu_xuat)
+                                {
+                                    <!-- #region Sản Phẩm Bán Chạy -->
+                                    <div class="card mb-2">
+                                        <div class="row g-0 sh-14 sh-md-10">                                            
+                                            <div class="col">
+                                                <div class="card-body pt-0 pb-0 h-100">
+                                                    <div class="row g-0 h-100 align-content-center">
+                                                        <div class="col-12 col-md-3 d-flex align-items-center justify-content-md-end mb-1 mb-md-0 text-alternate">@item.name</div>
+                                                        <div class="col-12 col-md-3 d-flex align-items-center justify-content-md-end mb-1 mb-md-0 text-alternate">@item.quantity</div>
+                                                        <div class="col-12 col-md-3 d-flex align-items-center justify-content-md-end mb-1 mb-md-0 text-alternate">@item.price</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- #endregion -->
+                                }
+                            </div>
+                        </div>
+                    </div><div class="os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable os-scrollbar-auto-hidden">
+                        <div class="os-scrollbar-track os-scrollbar-track-off">
+                            <div class="os-scrollbar-handle" style="width: 100%; transform: translate(0px, 0px);"></div>
+                        </div>
+                    </div><div class="os-scrollbar os-scrollbar-vertical os-scrollbar-auto-hidden" style="height: calc(100% - 8px);">
+                        <div class="os-scrollbar-track os-scrollbar-track-off">
+                            <div class="os-scrollbar-handle" style="height: 81.4815%; transform: translate(0px, 0px);"></div>
+                        </div>
+                    </div><div class="os-scrollbar-corner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var popup = document.getElementById("ratingPopup");
+
+            // Hiển thị popup
+            popup.classList.add("show");
+
+            // Ẩn popup sau 2 giây
+            setTimeout(function () {
+                popup.classList.remove("show");
+            }, 2000);
+        });
+    </script>
+    <script src="~/Assets1/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="~/Assets1/js/main.js"></script>
+    <script src="~/Assets1/js/dashboards-analytics.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var popup = document.getElementById("ratingPopup");
+
+            // Hiển thị popup
+            popup.classList.add("show");
+
+            // Ẩn popup sau 2 giây
+            setTimeout(function () {
+                popup.classList.remove("show");
+            }, 2000);
+        });
+    </script>
+

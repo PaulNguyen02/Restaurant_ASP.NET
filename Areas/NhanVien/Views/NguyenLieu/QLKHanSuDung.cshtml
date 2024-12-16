@@ -1,0 +1,43 @@
+﻿@using QuanLyNhaHang.Models
+@model IEnumerable<NguyenLieuViewModel>
+@{
+    ViewBag.Title = "QLKHanSuDung";
+    Layout = "~/Areas/NhanVien/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2>QUẢN LÝ NGUYÊN LIỆU TỒN KHO</h2>
+
+
+<h2>Danh sách Nguyên Liệu</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Mã Nguyên Liệu</th>
+            <th>Tên Nguyên Liệu</th>
+            <th>Số Lượng Hiện Còn</th>
+            <th>Ghi Chú</th>
+            <th>Giá Nhập Cuối</th>
+            <th>Loại Nguyên Liệu</th>
+            <th>Hạn Sử Dụng</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MaNguyenLieu</td>
+                <td>@item.TenNguyenLieu</td>
+                <td>@item.SoLuongHienCon</td>
+                <td>@item.GhiChu</td>
+                <td>@item.GiaNhapCuoi</td>
+                <td>@item.TenLoaiNguyenLieu</td>
+                <td>@item.HanSuDung</td>
+                <td>
+                    @Html.ActionLink("Edit", "QLKChinhSuaHSD", new { id = item.MaNguyenLieu }, new { @class = "btn btn-primary" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

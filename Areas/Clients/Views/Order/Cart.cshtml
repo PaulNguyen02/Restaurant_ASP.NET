@@ -1,0 +1,293 @@
+﻿@model IEnumerable<QuanLyNhaHang.Models.Ban>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Clients/Views/Shared/_LayoutClient.cshtml";
+}
+<style>
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    #orderList {
+        list-style: none;
+        padding: 0;
+    }
+
+    .order-item {
+        background: #f9f9f9;
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .item-name {
+        font-weight: bold;
+    }
+
+    .remove-btn {
+        padding: 5px 10px;
+        color: white;
+        background-color: red;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .remove-btn:hover {
+            background-color: darkred;
+        }
+
+    #placeOrder {
+        display: block;
+        width: 80%;
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 12px 20px;
+        background-color: #3498db;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        /* Hiệu ứng hover */
+        #placeOrder:hover {
+            background-color: #2980b9; /* Màu xanh dương đậm hơn */
+            transform: scale(1.03); /* Phóng to nhẹ khi hover */
+        }
+
+        /* Hiệu ứng khi nhấn */
+        #placeOrder:active {
+            background-color: #1c6a9e; /* Màu xanh dương đậm nhất */
+            transform: scale(0.97); /* Thu nhỏ nhẹ khi nhấn */
+        }
+
+        /* Nút bị vô hiệu hóa (nếu cần) */
+        #placeOrder:disabled {
+            background-color: #bdc3c7; /* Màu xám nhạt */
+            color: #7f8c8d; /* Màu chữ xám */
+            cursor: not-allowed; /* Con trỏ chuột không cho phép bấm */
+            box-shadow: none; /* Bỏ hiệu ứng đổ bóng */
+        }
+
+    option {
+        font-size: 1rem; /* Đảm bảo chữ hiển thị rõ */
+        font-family: Arial, sans-serif; /* Font chữ thống nhất */
+        color: #333; /* Màu chữ mặc định */
+        background-color: #fff; /* Màu nền */
+        padding: 5px; /* Tăng khoảng cách giữa các mục */
+        border: none; /* Loại bỏ viền mặc định */
+    }
+</style>
+<header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(/Assets2/images/Background3.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-0 text-left">
+
+
+                <div class="row row-mt-15em">
+                    <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+                        <span class="intro-text-small">Đặc sản miền quê Việt Nam</span>
+                        <h1 class="cursive-font">Euphoria Restaurant</h1>
+                        <span class="intro-text-small">Ra mắt từ năm 2005, nhà hàng Euphoria đã </span>
+                    </div>
+                    <div class="col-md-4 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
+                        <div class="form-wrap">
+                            <div class="tab">
+
+                                <div class="tab-content">
+                                    <div class="tab-content-inner active" data-content="signup">
+                                        <h3 class="cursive-font">Đặt bàn</h3>
+                                        <form action="#" method="post">
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="activities">Số người</label>
+                                                    <input id="activities" class="form-control" type="number" required />
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="activities">Chọn bàn</label>
+                                                    <select name="#" id="activities" class="form-control" required>
+                                                        <option value="">Bàn</option>
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            <option value="@item.MaBan">@item.TenBan</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="date-start">Ngày</label>
+                                                    <input type="text" id="date" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="date-start">Thời gian</label>
+                                                    <input type="text" id="time" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<h1>Danh sách món đã đặt</h1>
+<ul id="orderList">
+    <!-- Danh sách món sẽ được hiển thị ở đây -->
+</ul>
+<h3 style="display: flex; justify-content: center; align-items: center; " id="totalPrice"></h3>
+<h3 style="color:red; display: flex; justify-content: center; align-items: center; " id="deposit"></h3>
+<button id="placeOrder" style="display: none;">Đặt tiệc</button>
+<script>
+    // Lấy danh sách món từ localStorage
+    function loadOrders() {
+        const orders = JSON.parse(localStorage.getItem("cart")) || [];
+        return orders;
+    }
+
+    // Lưu danh sách món vào localStorage
+    function saveOrders(orders) {
+        localStorage.setItem("cart", JSON.stringify(orders));
+    }
+
+    // Hiển thị danh sách món
+    function displayOrders() {
+        const orderList = document.getElementById("orderList");
+        const placeOrderBtn = document.getElementById("placeOrder");
+        const totalPriceDisplay = document.getElementById("totalPrice");
+        const depositDisplay = document.getElementById("deposit");
+        const orders = loadOrders();
+
+        // Xóa danh sách cũ trước khi hiển thị lại
+        orderList.innerHTML = "";
+
+        // Kiểm tra nếu danh sách trống
+        if (orders.length === 0) {
+            orderList.innerHTML = "<li id='empty-list'>Không có món nào trong danh sách.</li>";
+            placeOrderBtn.style.display = "none";
+            return;
+        }
+        let totalPrice = 0;
+        // Hiển thị danh sách món
+        orders.forEach((order, index) => {
+            const listItem = document.createElement("li");
+
+            listItem.classList.add("order-item"); // Thêm class chung "order-item"
+            const sanitizedName = order.name.toLowerCase().replace(/\s+/g, "-"); // Tên món được chuẩn hóa
+            listItem.id = `item-${index}-${sanitizedName}`;
+
+            const itemPrice = order.price * order.quantity;
+            totalPrice += itemPrice; // Cộng dồn vào tổng tiền
+
+            // Tạo nội dung cho món
+            listItem.innerHTML = `
+              <span class="item-name">${order.name}</span>
+              <span>x${order.quantity}</span>
+              <span class="item-price">${itemPrice.toLocaleString()} đ</span>
+              <button class="remove-btn" data-index="${index}">Xóa</button>
+            `;
+
+            // Gắn sự kiện "xóa" cho nút
+            listItem.querySelector(".remove-btn").addEventListener("click", () => {
+                removeOrder(index);
+            });
+
+            orderList.appendChild(listItem);
+        });
+        var deposit = (totalPrice * 50) /100
+        totalPriceDisplay.textContent = `Tổng đơn đặt: ${totalPrice.toLocaleString()} đ`;
+        depositDisplay.textContent = `Số tiền cần trả trước: ${deposit.toLocaleString()} đ`;
+        // Hiển thị nút "Đặt hàng" nếu có món
+        placeOrderBtn.style.display = "block";
+
+        // Gắn sự kiện cho nút "Đặt hàng"
+        placeOrderBtn.onclick = placeOrder;
+    }
+
+    // Xóa một món khỏi danh sách
+    function removeOrder(index) {
+        const orders = loadOrders();
+        orders.splice(index, 1);
+        saveOrders(orders);
+        displayOrders();
+    }
+
+    // Hàm xử lý khi nhấn nút "Đặt hàng"
+    async function placeOrder() {
+        alert("Đơn hàng của bạn đã được đặt thành công!");
+        displayOrders();
+        const orders = loadOrders();
+        const formData = {
+            soNguoi: parseInt(document.getElementById("activities").value),
+            maBan: parseInt(document.querySelector("#activities option:checked").value),
+            ngay: document.getElementById("date").value,
+            thoiGian: document.getElementById("time").value
+        };
+        const amount = document.getElementById("deposit").textContent; // Lấy nội dung văn bản từ thẻ
+        const preorder = amount.replace("Số tiền cần trả trước: ", "").replace(" đ", "").replace(/,/g, ""); // Loại bỏ chuỗi không cần thiết
+        const deposit = parseInt(preorder, 10);
+        if (!formData.soNguoi || !formData.maBan || !formData.ngay || !formData.thoiGian) {
+            alert("Vui lòng điền đầy đủ thông tin đặt bàn!");
+            return;
+        }
+
+        
+        const payload = {
+            form: formData,
+            orders: orders,
+            deposit: deposit
+        };
+
+        try {
+            const response = await fetch("/Order/PartyReserve", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert("Đơn hàng của bạn đã được đặt thành công!");
+
+                // Xóa localStorage chỉ sau khi đặt hàng thành công
+                localStorage.removeItem("cart");
+
+                // Hiển thị lại danh sách
+                displayOrders();
+            } else {
+                const error = await response.text();
+                alert(`Có lỗi xảy ra: ${error}`);
+            }
+        } catch (error) {
+            console.error("Lỗi khi gửi yêu cầu:", error);
+            alert("Có lỗi xảy ra trong quá trình đặt hàng. Vui lòng thử lại sau.");
+        }
+        localStorage.removeItem("orders");
+    }
+
+    // Khi trang load, hiển thị danh sách
+    document.addEventListener("DOMContentLoaded", displayOrders);
+
+</script>

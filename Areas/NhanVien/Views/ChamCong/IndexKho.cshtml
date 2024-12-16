@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Generate QR Code";
+    Layout = "~/Areas/NhanVien/Views/Shared/_LayoutNhanVien.cshtml";
+    var nhanvienkho = Session["TaiKhoanKho"] as QuanLyNhaHang.Models.NhanVien;
+}
+<h2>Chấm công</h2>
+@if (Session["TaiKhoanKho"] != null)
+{
+    <img src="@ViewBag.QRCodeUrl" alt="QR Code" />
+}
+
+
+<script src="https://cdn.jsdelivr.net/npm/@('@')zxing/library@latest"></script>
+<video id="preview"></video>
+
+<script>
+    const codeReader = new ZXing.BrowserQRCodeReader();
+    const videoInputDevices = await codeReader.listVideoInputDevices();
+    codeReader.decodeFromInputVideoDevice(videoInputDevices[0].deviceId, 'preview')
+        .then(result => {
+            fetch('/QR/ScanQR', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ employeeId: result.text })
+            }).then(response => response.json())
+                .then(data => alert('Chấm công thành công!'));
+        });</script>

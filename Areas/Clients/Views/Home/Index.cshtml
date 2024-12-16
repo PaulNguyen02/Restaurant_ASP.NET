@@ -1,0 +1,307 @@
+﻿@model QuanLyNhaHang.Models.ViewModel.OrderDishes
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Clients/Views/Shared/_LayoutClient.cshtml";
+}
+@if (TempData["LoginMessage"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["LoginMessage"]
+    </div>
+}
+<style>
+    .rating {
+        font-size: 30px;
+        color: #ccc; /* Màu xám cho sao chưa được chọn */
+        cursor: pointer;
+    }
+
+        .rating .star {
+            transition: color 0.3s;
+        }
+
+            .rating .star.selected {
+                color: #ffcc00; /* Màu vàng cho sao đã chọn */
+            }
+
+    .average-rating {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    option {
+        font-size: 1rem; /* Đảm bảo chữ hiển thị rõ */
+        font-family: Arial, sans-serif; /* Font chữ thống nhất */
+        color: #333; /* Màu chữ mặc định */
+        background-color: #fff; /* Màu nền */
+        padding: 5px; /* Tăng khoảng cách giữa các mục */
+        border: none; /* Loại bỏ viền mặc định */
+    }
+</style>
+<header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(/Assets2/images/Background.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-0 text-left">
+
+
+                <div class="row row-mt-15em">
+                    <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+                        <span class="intro-text-small">Đặc sản miền quê Việt Nam</span>
+                        <h1 class="cursive-font">Euphoria Restaurant</h1>
+                        <span class="intro-text-small">Ra mắt từ năm 2005, nhà hàng Euphoria đã </span>
+                    </div>
+                    <div class="col-md-4 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
+                        <div class="form-wrap">
+                            <div class="tab">
+
+                                <div class="tab-content">
+                                    <div class="tab-content-inner active" data-content="signup">
+                                        <h3 class="cursive-font">Đặt bàn</h3>
+                                        <form action="/Home/Reserve" method="post">
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="activities">Số người</label>
+                                                    <input id="activities" class="form-control" name="number" type="number" required/>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="activities">Chọn bàn</label>
+                                                    <select name="selected_table" id="activities" class="form-control" required>
+                                                        <option value="">Bàn</option>
+                                                        @foreach (var item in Model.ban)
+                                                        {
+                                                            <option value="@item.MaBan">@item.TenBan</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="date-start">Ngày</label>
+                                                    <input type="text" id="date" name="date" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="date-start">Thời gian</label>
+                                                    <input type="text" id="time" name="time" class="form-control" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <input type="submit" class="btn btn-primary btn-block" value="Đặt trước ngay" required>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="gtco-section">
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                <h2 class="cursive-font primary-color">Món ăn được yêu thích nhất</h2>
+                <p>Top các món ăn được yêu thích nhất nhà hàng Euphoria</p>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var item in Model.mon_an)
+            {
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <a href="@item.picture" class="fh5co-card-item image-popup">
+                        <figure>
+                            <div class="overlay"><i class="ti-plus"></i></div>
+                            <img src="@item.picture" alt="Image" class="img-responsive">
+                        </figure>
+                        <div class="fh5co-text">
+                            <h2>@item.name</h2>
+                            <p>@item.info</p>
+                            <p><span class="price cursive-font">@item.price đ</span></p>
+                            <div class="rating" data-item-id="@item.Id" data-initial-rating="@item.rating">
+                                <span class="star" data-rating="1">&#9733;</span>
+                                <span class="star" data-rating="2">&#9733;</span>
+                                <span class="star" data-rating="3">&#9733;</span>
+                                <span class="star" data-rating="4">&#9733;</span>
+                                <span class="star" data-rating="5">&#9733;</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div id="gtco-features">
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                <h2 class="cursive-font">Dịch vụ của chúng tôi</h2>
+                <p>Với châm ngôn khách hàng như người một nhà, chúng tôi luôn mang đến trải nghiệm tuyệt vời nhất khi dùng bữa tại nhà hàng Euphoria</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                <div class="feature-center " data-animate-effect="fadeIn">
+                    <span class="icon">
+                        <i class="ti-face-smile"></i>
+                    </span>
+                    <h3>Hài lòng khách hàng</h3>
+                    <p>Khách hàng sẽ không thất vọng khi dùng bữa tại nhà hàng chúng tôi</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="feature-center " data-animate-effect="fadeIn">
+                    <span class="icon">
+                        <i class="ti-thought"></i>
+                    </span>
+                    <h3>Sáng tạo ẩm thực</h3>
+                    <p>Ẩm thực là sự tinh túy giữa sáng tạo và kiên trì</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="feature-center" >
+                    <span class="icon">
+                        <i class="ti-truck"></i>
+                    </span>
+                    <h3>Sản phẩm tươi sạch</h3>
+                    <p>Sản phẩm tươi sạch được giao nhanh chóng và được sử dụng ngay trong ngày</p>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="gtco-cover gtco-cover-sm" style="background-image: url(/Assets2/images/vietnamese-cuisine3.png)" >
+    <div class="overlay"></div>
+    <div class="gtco-container text-center">
+        <div class="display-t">
+            <div class="display-tc">
+                <h1>&ldquo; Ẩm thực là nghệ thuật, còn đầu bếp là nghệ nhân, tất cả đều xuất phát từ sáng tạo&rdquo;</h1>
+                <p>&mdash; Đầu bếp Phúc Nguyễn</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="gtco-counter" class="gtco-section">
+    <div class="gtco-container">
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center gtco-heading">
+                <h2 class="cursive-font primary-color">Lịch sử</h2>
+                <p>Hành trình của Euphoria trong suốt 20 năm là mang lại sự hài lòng cho khách hàng</p>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3 col-sm-6" data-animate-effect="fadeInUp">
+                <div class="feature-center">
+                    <span class="counter js-counter" data-from="0" data-to="5" data-speed="5000" data-refresh-interval="50">15000</span>
+                    <span class="counter-label">Lượt đánh giá trung bình</span>
+
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6" data-animate-effect="fadeInUp">
+                <div class="feature-center">
+                    <span class="counter js-counter" data-from="0" data-to="43" data-speed="5000" data-refresh-interval="50">30+</span>
+                    <span class="counter-label">Loại đồ ăn & thức uống</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6" data-animate-effect="fadeInUp">
+                <div class="feature-center">
+                    <span class="counter js-counter" data-from="0" data-to="32" data-speed="5000" data-refresh-interval="50">15+</span>
+                    <span class="counter-label">Đầu bếp có kinh nghiệm</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6" data-animate-effect="fadeInUp">
+                <div class="feature-center">
+                    <span class="counter js-counter" data-from="0" data-to="2005" data-speed="5000" data-refresh-interval="50">20</span>
+                    <span class="counter-label">Năm phát triển</span>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    setTimeout(function () {
+        var message = document.getElementById("loginMessage");
+        if (message) {
+            message.style.display = "none";
+        }
+    }, 2000);
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy tất cả các phần tử rating
+        const ratings = document.querySelectorAll('.rating');
+
+        ratings.forEach(function (ratingElement) {
+            // Lấy giá trị rating ban đầu từ data-initial-rating
+            const initialRating = parseInt(ratingElement.getAttribute('data-initial-rating'), 10);
+
+            // Lấy tất cả các sao con
+            const stars = ratingElement.querySelectorAll('.star');
+
+            // Cập nhật màu sắc sao dựa trên giá trị initialRating
+            stars.forEach(function (star, index) {
+                if (index < initialRating) {
+                    star.classList.add('selected');  // Thêm màu vàng cho sao đã chọn
+                } else {
+                    star.classList.remove('selected'); // Loại bỏ màu vàng cho sao chưa chọn
+                }
+            });
+
+            // Lặp qua tất cả các sao và thêm sự kiện click
+            stars.forEach(function (star, index) {
+                star.addEventListener('click', function () {
+                    // Lấy id của item từ data-item-id
+                    const itemId = parseInt(ratingElement.getAttribute('data-item-id'));
+
+                    // Lấy số sao đã chọn (index bắt đầu từ 0 nên cần +1)
+                    let rating = index + 1;
+
+                    // Cập nhật màu sao: thêm class 'selected' cho các sao từ 1 đến sao đã chọn
+                    stars.forEach(function (star, idx) {
+                        if (idx < rating) {
+                            star.classList.add('selected');  // Thêm màu vàng cho sao đã chọn
+                        } else {
+                            star.classList.remove('selected'); // Loại bỏ màu vàng cho sao chưa chọn
+                        }
+                    });
+
+                });
+            });
+        });
+
+    });
+</script>
+
+
+
+
+
+
+
+
+

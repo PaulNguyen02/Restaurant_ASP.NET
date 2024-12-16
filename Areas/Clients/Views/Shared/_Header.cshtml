@@ -1,0 +1,49 @@
+﻿
+<nav class="gtco-nav" role="navigation">
+    <div class="gtco-container">
+
+        <div class="row">
+            <div class="col-sm-4 col-xs-12">
+                <div id="gtco-logo"><a href="index.html">Euphoria <em>.</em></a></div>
+            </div>
+            <div class="col-xs-8 text-right menu-1">
+                <ul>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li class="has-dropdown">
+                        <a href="#">Menu</a>
+                        <ul class="dropdown">
+                            <li><a href="/Menu/Dishes">Món ăn</a></li>
+                            <li><a href="/Menu/Beverage">Đồ uống</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-dropdown">
+                        <a href="#">Đánh giá</a>
+                        <ul class="dropdown">
+                            <li><a href="/Lounge/Index">Khu vực ăn uống</a></li>
+                            <li><a href="/Staff/Index">Nhân viên</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/Home/Contact">Liên hệ</a></li>
+                    <li><a href="/Career/Index">Tuyển dụng</a></li>
+                    <li class="has-dropdown">
+                        <a href="#">Đặt tiệc</a>
+                        <ul class="dropdown">
+                            <li><a href="/Order/Index">Đặt tiệc</a></li>
+                            <li><a href="/Order/Cart">Tiệc đã đặt</a></li>
+                        </ul>
+                    </li>                    
+                    @if (Session["user_name"] == null)
+                    {
+                        <button id="openPopup">Đăng nhập</button>
+                    }
+                    else
+                    {
+                        <a id="openPopup">@Session["user_name"]</a>
+                    }
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</nav>
+

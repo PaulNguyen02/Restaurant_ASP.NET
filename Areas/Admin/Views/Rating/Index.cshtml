@@ -1,0 +1,242 @@
+﻿@model QuanLyNhaHang.Models.ViewModel.AdminRating
+@{
+    ViewBag.Title = "Danh sách Nhân viên";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container" id="DanhSachHoaDon">
+    <div class="page-title-container">
+        <div class="row g-0">
+            <div class="col-auto mb-3 mb-md-0 me-auto">
+                <div class="w-auto">
+                    <h1 class="mb-0 pb-0 " id="title">Đánh giá</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-sm-12 col-md-5 col-lg-3 col-xxl-2 mb-1">
+            <div class="d-inline-block float-md-start me-1 mb-1 search-input-container w-100 shadow bg-foreground">
+                <input class="form-control search" placeholder="Search">
+                <span class="search-magnifier-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="cs-icon cs-icon-search"><circle cx="9" cy="9" r="7"></circle><path d="M14 14L17.5 17.5"></path></svg>
+                </span>
+                <span class="search-delete-icon d-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="cs-icon cs-icon-close"><path d="M5 5 15 15M15 5 5 15"></path></svg>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true">Đánh giá món ăn</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2" aria-selected="false">Đánh giá khu vực</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="tab3" aria-selected="false">Đánh giá nhân viên</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <!-- Tab 1 Content -->
+        <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+            <!-- Nội dung của tab 1 -->
+            <div class="row g-0">
+                <div class="col-12 mb-5">
+                    <div id="checkboxTable">
+                        <!-- Phần mã của bạn, bao gồm danh sách và bảng -->
+                        <div class="mb-4 mb-lg-3 bg-transparent no-shadow d-none d-lg-block">
+                            <div class="row g-0">
+                                <div class="col">
+                                    <div class="ps-5 pe-4 h-100">
+                                        <div class="row g-0 h-100 align-content-center custom-sort">
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="TenKhachHang">Tên Món Ăn</div>
+                                            </div>
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="NgayTao">Mô tả</div>
+                                            </div>
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-left">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="NgayThanhToan">Ngày cập nhật</div>
+                                            </div>
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="TongTien">Giá</div>
+                                            </div>
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="ThanhToan">Đánh giá</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Danh sách hóa đơn -->
+                        <div class="list">
+                            @foreach (var item in Model.dishes)
+                            {
+                                <div class="card mb-2">
+                                    <div class="row g-0 h-100 sh-lg-9 position-relative">
+                                        <div class="col py-4 py-lg-0">
+                                            <div class="ps-5 pe-4 h-100">
+                                                <div class="row g-0 h-100 align-content-center">
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.TenMonAn</div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.ThongTin</div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate NgaySinh">@string.Format("{0:dd/MM/yyyy}", item.NgayCapNhat)</div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.DonGia</div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.DanhGia</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!-- Pagination -->
+                        <div class="w-100 d-flex justify-content-center">
+                            <ul class="pagination"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tab 2 Content -->
+        <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+            <!-- Nội dung của tab 1 -->
+            <div class="row g-0">
+                <div class="col-12 mb-5">
+                    <div id="checkboxTable">
+                        <!-- Phần mã của bạn, bao gồm danh sách và bảng -->
+                        <div class="mb-4 mb-lg-3 bg-transparent no-shadow d-none d-lg-block">
+                            <div class="row g-0">
+                                <div class="col">
+                                    <div class="ps-5 pe-4 h-100">
+                                        <div class="row g-0 h-100 align-content-center custom-sort">
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="TenKhachHang">Tên Khu Vực</div>
+                                            </div>
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="NgayTao">Đánh giá</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Danh sách hóa đơn -->
+                        <div class="list">
+                            @foreach (var item in Model.lounge)
+                            {
+                                <div class="card mb-2">
+                                    <div class="row g-0 h-100 sh-lg-9 position-relative">
+                                        <div class="col py-4 py-lg-0">
+                                            <div class="ps-5 pe-4 h-100">
+                                                <div class="row g-0 h-100 align-content-center">
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.TenKhuVuc</div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.DanhGia</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!-- Pagination -->
+                        <div class="w-100 d-flex justify-content-center">
+                            <ul class="pagination"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+            <!-- Nội dung của tab 1 -->
+            <div class="row g-0">
+                <div class="col-12 mb-5">
+                    <div id="checkboxTable">
+                        <!-- Phần mã của bạn, bao gồm danh sách và bảng -->
+                        <div class="mb-4 mb-lg-3 bg-transparent no-shadow d-none d-lg-block">
+                            <div class="row g-0">
+                                <div class="col">
+                                    <div class="ps-5 pe-4 h-100">
+                                        <div class="row g-0 h-100 align-content-center custom-sort">
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="TenKhachHang">Tên Nhân Viên</div>
+                                            </div>
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="NgayTao">Ngày sinh</div>
+                                            </div>
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="NgayTao">Số điện thoại</div>
+                                            </div>
+                                            <div class="col-lg-2 d-flex flex-column pe-1 justify-content-center">
+                                                <div class="text-muted text-body cursor-pointer sort" data-sort="NgayTao">Đánh giá</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Danh sách hóa đơn -->
+                        <div class="list">
+                            @foreach (var item in Model.staffs)
+                            {
+                                <div class="card mb-2">
+                                    <div class="row g-0 h-100 sh-lg-9 position-relative">
+                                        <div class="col py-4 py-lg-0">
+                                            <div class="ps-5 pe-4 h-100">
+                                                <div class="row g-0 h-100 align-content-center">
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.TenNhanVien</div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.NgaySinh</div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.SoDienThoai</div>
+                                                    </div>
+                                                    <div class="col-12 col-lg-2 d-flex flex-column pe-1 mb-2 mb-lg-0 justify-content-center order-3">
+                                                        <div class="lh-1 text-alternate TaiKhoan">@item.DanhGia</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!-- Pagination -->
+                        <div class="w-100 d-flex justify-content-center">
+                            <ul class="pagination"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- #region Script lọc -->
+<script type="text/javascript">
+    var options = {
+        valueNames: ['TenNhanhVien', 'TaiKhoan', 'NgaySinh', 'SDT'],
+        page: 8,
+        pagination: true
+    };
+    var userList = new List('DanhSachHoaDon', options);
+</script>
+
+<!-- #endregion -->

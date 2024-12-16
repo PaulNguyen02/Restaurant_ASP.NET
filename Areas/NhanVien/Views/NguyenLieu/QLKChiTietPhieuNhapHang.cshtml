@@ -1,0 +1,96 @@
+﻿@model IEnumerable<QuanLyNhaHang.Models.ChiTietPhieuNhapViewModel>
+
+@{
+    ViewBag.Title = "Chi tiết Phiếu Nhập";
+    Layout = "~/Areas/NhanVien/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2>Thông tin Phiếu Nhập</h2>
+<p><strong>Mã Phiếu Nhập:</strong> @ViewBag.PhieuNhap.MaPhieuNhap</p>
+<p><strong>Ngày Nhập:</strong> @ViewBag.PhieuNhap.NgayNhap</p>
+<p><strong>Tổng Tiền:</strong> @ViewBag.PhieuNhap.TongTien ( VND )</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Tên Nguyên Liệu</th>
+                <th>Mã Nguyên Liệu</th>
+                <th>Số Lượng Nhập</th>
+                <th>Giá Nhập</th>
+                <th>Thành Tiền</th>
+                <th>Hạn Sử Dụng</th>
+                <th>Chỉnh Sửa Hạn Sử Dụng</th>
+                <th>Trạng Thái Hạn Sử Dụng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var cssClass = item.DaysLeft < 5 ? "table-danger" : "table-success";
+                var hanSuDungMessage = item.DaysLeft < 5
+                    ? "Hạn sử dụng còn dưới 5 ngày"
+                    : $"Hạn sử dụng: {item.DaysLeft} ngày";
+                <tr class="@cssClass">
+                    <td>@item.NguyenLieu.TenNguyenLieu</td>
+                    <td>@item.MaNguyenLieu_id</td>
+                    <td>@item.SoLuongNhap</td>
+                    <td>@item.GiaNhap</td>
+                    <td>@item.ThanhTien</td>
+                    <td>@item.HanSuDung</td>
+                    <td>
+                        <input type="date" class="form-control" value="@item.HanSuDung?.ToString(" yyyy-MM-dd")"
+                               onchange="updateHanSuDung(@ViewBag.PhieuNhap.MaPhieuNhap, @item.MaNguyenLieu_id, this.value)">
+                    </td>
+                    <td>
+                        <span class="badge @cssClass">@hanSuDungMessage</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function updateHanSuDung(maPhieuNhap_id, maNguyenLieu_id, hanSuDung) {
+            $.ajax({
+                url: '@Url.Action("UpdateHanSuDung", "NguyenLieu")',
+                type: 'POST',
+                data: {
+                    maPhieuNhap_id: maPhieuNhap_id,
+                    maNguyenLieu_id: maNguyenLieu_id,
+                    hanSuDung: hanSuDung
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Cập nhật hạn sử dụng thành công.');
+                        location.reload(); // Reload the page to update the table row colors
+                    } else {
+                        alert('Cập nhật hạn sử dụng thất bại: ' + response.message);
+                    }
+                }
+            });
+        }
+    </script>
+}
+
+<style>
+    .table-danger {
+        background-color: #f8d7da;
+    }
+
+    .table-success {
+        background-color: #d4edda;
+    }
+
+    .badge.table-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .badge.table-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+</style>

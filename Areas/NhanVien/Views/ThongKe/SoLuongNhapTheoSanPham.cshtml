@@ -1,0 +1,47 @@
+﻿@using QuanLyNhaHang.Models
+@model ThongKeSanPhamViewModel
+@{
+    ViewBag.Title = "SoLuongNhapTheoSanPham";
+    Layout = "~/Areas/NhanVien/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2 class="display-4 text-center">Tổng số lượng nhập theo sản phẩm</h2>
+
+
+<div class="container">
+    <form asp-action="SoLuongNhapTheoSanPham" method="post" class="form-inline mb-3">
+        <div class="form-group mb-2">
+            <label for="startDate" class="sr-only">Từ ngày</label>
+            <input type="date" class="form-control" id="startDate" name="startDate" required>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="endDate" class="sr-only">Đến ngày</label>
+            <input type="date" class="form-control" id="endDate" name="endDate" required>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Thống kê</button>
+    </form>
+
+    @if (Model != null && Model.SanPhamThongKeList.Any())
+    {
+        <h3>Kết quả:</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Tên Nguyên Liệu</th>
+                        <th>Số Lượng Nhập</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.SanPhamThongKeList)
+                    {
+                        <tr>
+                            <td>@item.TenNguyenLieu</td>
+                            <td>@item.SoLuongNhap</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+    }

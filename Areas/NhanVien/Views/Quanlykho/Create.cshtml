@@ -1,0 +1,134 @@
+﻿@using QuanLyNhaHang.Models
+@model PhieuNhapViewModel
+
+@{
+    ViewBag.Title = "Trang Chủ";
+    Layout = "~/Areas/NhanVien/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2>Lập phiếu nhập hàng</h2>
+
+<form action="/Quanlykho/Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Phiếu nhập hàng</h4>
+        <hr />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NgayNhap,"Ngày lập phiếu", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NgayNhap, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NgayNhap, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TaiKhoanNV_id, "Nhân viên lập phiếu", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.TaiKhoanNV_id, Model.NhanVienList, "Chọn nhân viên", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TaiKhoanNV_id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaNCC_id, "Nhà cung cấp", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.MaNCC_id, Model.NhaCungCapList, "Chọn nhà cung cấp", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MaNCC_id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <h4>Chi tiết phiếu nhập hàng</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nguyên liệu nhập</th>
+                    <th>Số lượng nhập</th>
+                    <th>Giá nhập ( VND )</th>
+                    <th>Thành tiền</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="chiTietPhieuNhapsBody">
+                @for (int i = 0; i < Model.ChiTietPhieuNhaps.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.DropDownListFor(model => model.ChiTietPhieuNhaps[i].MaNguyenLieu_id, Model.NguyenLieuList, "Chọn nguyên liệu", new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.ChiTietPhieuNhaps[i].SoLuongNhap, new { htmlAttributes = new { @class = "form-control", @onchange = "calculateRowTotal(this)" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.ChiTietPhieuNhaps[i].GiaNhap, new { htmlAttributes = new { @class = "form-control", @onchange = "calculateRowTotal(this)" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.ChiTietPhieuNhaps[i].ThanhTien, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" onclick="removeRow(this)">Xóa</button>
+                        </td>
+                    </tr>
+                }
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TongTien,"Tổng tiền ( VND )", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.TongTien, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @id = "TongTien" } })
+                    </div>
+                </div>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-primary" onclick="addRow()">Thêm</button>
+
+      
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function addRow() {
+            var rowCount = $('#chiTietPhieuNhapsBody tr').length;
+            var row = '<tr>' +
+                '<td><select class="form-control" name="ChiTietPhieuNhaps[' + rowCount + '].MaNguyenLieu_id">' +
+                '@foreach (var item in Model.NguyenLieuList) { <option value="@item.Value">@item.Text</option> }' +
+                '</select></td>' +
+                '<td><input class="form-control" type="text" name="ChiTietPhieuNhaps[' + rowCount + '].SoLuongNhap" onchange="calculateRowTotal(this)" /></td>' +
+                '<td><input class="form-control" type="text" name="ChiTietPhieuNhaps[' + rowCount + '].GiaNhap" onchange="calculateRowTotal(this)" /></td>' +
+                '<td><input class="form-control" type="text" name="ChiTietPhieuNhaps[' + rowCount + '].ThanhTien" readonly="readonly" /></td>' +
+                '<td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>' +
+                '</tr>';
+            $('#chiTietPhieuNhapsBody').append(row);
+        }
+
+        function removeRow(button) {
+            $(button).closest('tr').remove();
+            updateTotal();
+        }
+
+        function calculateRowTotal(element) {
+            var row = $(element).closest('tr');
+            var soLuongNhap = parseFloat(row.find('input[name*="SoLuongNhap"]').val()) || 0;
+            var giaNhap = parseFloat(row.find('input[name*="GiaNhap"]').val()) || 0;
+            var thanhTien = soLuongNhap * giaNhap;
+            row.find('input[name*="ThanhTien"]').val(thanhTien.toFixed(0));
+            updateTotal();
+        }
+
+        function updateTotal() {
+            var total = 0;
+            $('#chiTietPhieuNhapsBody tr').each(function() {
+                var thanhTien = parseFloat($(this).find('input[name*="ThanhTien"]').val()) || 0;
+                total += thanhTien;
+            });
+            $('#TongTien').val(total.toFixed(0));
+        }
+    </script>
+}

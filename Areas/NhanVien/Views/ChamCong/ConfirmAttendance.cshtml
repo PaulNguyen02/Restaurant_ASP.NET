@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Xác Nhận Chấm Công";
+}
+
+<h1>Xác nhận chấm công</h1>
+<p>Bạn có chắc chắn muốn chấm công cho nhân viên ID: @ViewBag.EmployeeId?</p>
+
+<form id="confirmForm" method="post" action="@Url.Action("ScanQR", "ChamCong")">
+    <input type="hidden" name="employeeId" value="@ViewBag.EmployeeId" />
+    <button type="submit">Xác nhận</button>
+</form>

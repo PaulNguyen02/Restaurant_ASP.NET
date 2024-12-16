@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Clients/Views/Shared/_LayoutClient.cshtml";
+}
+<header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(/Assets2/images/Background1.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-0 text-left">
+
+
+                <div class="row row-mt-15em">
+                    <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+                        <span class="intro-text-small">Trở thành thành viên của nhà</span>
+                        <h1 class="cursive-font">Euphoria Restaurant</h1>
+                    </div>
+                    <div class="col-md-4 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
+                        <div class="form-wrap">
+                            <div class="tab">
+
+                                <div class="tab-content">
+                                    <div class="tab-content-inner active" data-content="signup">
+                                        <h3 class="cursive-font">Ứng tuyển nhân viên</h3>
+                                        <form action="/Career/Apply" method="post">
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="activities">Họ tên</label>
+                                                    <input id="name" name="full_name" class="form-control" type="text" required />
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="date-start">Ngày sinh</label>
+                                                    <input type="text" name="dob" id="date" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="date-start">Địa chỉ</label>
+                                                    <input type="text" name="address" id="address" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="date-start">Số điện thoại</label>
+                                                    <input type="tel" name="phone" id="phone" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="date-start">Vị trí</label>
+                                                    <input type="text" name="position" id="position" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <input type="submit" class="btn btn-primary btn-block" value="Ứng tuyển  ngay" required>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</header>
